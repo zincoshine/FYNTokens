@@ -1,6 +1,0 @@
-build/*
-node_modules/*
-migrations/*
-truffle.js
-.node-xmlhttprequest-sync-*
-*.swp
