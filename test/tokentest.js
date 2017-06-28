@@ -5,7 +5,7 @@ var token;
 contract('Token', function(accounts) {
 
   it("test for adding milestones", async function() {
-    
+      token = await Token.deployed();
   });
 
   it("test for setting withdrawal", async function() {

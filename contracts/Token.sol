@@ -279,7 +279,7 @@ contract Token is ERC20 {
 
   //set milestones
   function addMilestone(uint _milestoneDays, uint _milestoneValue) external onlyFromWallet returns (bool){
-    uint endDate = creationTime.add(_milestoneDays);
+    uint endDate = creationTime.add(_milestoneDays * 1 days);
     milestoneDates[totalMilestones++] = endDate;
     milestoneAmounts[endDate] = _milestoneValue;
     MilestoneAdded(endDate,_milestoneValue);
@@ -287,7 +287,7 @@ contract Token is ERC20 {
   }
 
   function changeMilestone(uint index, uint _milestoneDays, uint _milestoneValue) external onlyFromWallet returns (bool) {
-    uint endDate = creationTime.add(_milestoneDays);
+    uint endDate = creationTime.add(_milestoneDays *  1 days);
     milestoneDates[index] = endDate;
     milestoneAmounts[endDate] = _milestoneValue;
     return true;
