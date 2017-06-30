@@ -1,5 +1,5 @@
 pragma solidity ^0.4.11;
-import './SafeMath.sol';
+import './SafeMath.sol'
 /*
 This FYN token contract is derived from the vSlice ICO contract, based on the ERC20 token contract.
 Additional functionality has been integrated:
@@ -44,7 +44,7 @@ contract Token is ERC20 {
   address fundsRaisedFor;
   mapping( uint => uint) milestoneDates;
   mapping( uint => uint ) milestoneAmounts;
-  uint totalMilestones;
+  uint public totalMilestones;
 
   event TokenMint(address newTokenHolder, uint amountOfTokens);
   event TokenSwapOver();
@@ -279,6 +279,9 @@ contract Token is ERC20 {
 
   //set milestones
   function addMilestone(uint _milestoneDays, uint _milestoneValue) external onlyFromWallet returns (bool){
+    if(_milestoneDays == 0) throw;
+    if(_milestoneValue == 0 || _milestoneValue > 100) throw;
+
     uint endDate = creationTime.add(_milestoneDays * 1 days);
     milestoneDates[totalMilestones++] = endDate;
     milestoneAmounts[endDate] = _milestoneValue;
@@ -287,14 +290,19 @@ contract Token is ERC20 {
   }
 
   function changeMilestone(uint index, uint _milestoneDays, uint _milestoneValue) external onlyFromWallet returns (bool) {
-    uint endDate = creationTime.add(_milestoneDays *  1 days);
+    if(_milestoneDays == 0) throw;
+    if(_milestoneValue == 0 || _milestoneValue > 100) throw;
+
+    uint endDate = creationTime.add(_milestoneDays * 1 days);
     milestoneDates[index] = endDate;
     milestoneAmounts[endDate] = _milestoneValue;
+    MilestoneAdded(endDate,_milestoneValue);
     return true;
   }
 
   //withdraw amount if milestone date is reached
   function withdrawFunds(uint index) external returns (bool) {
+    if(index < 0 || index > totalMilestones) throw;
     if(fundsRaisedFor == address(0)) throw;
 
     uint endDate = milestoneDates[index];
